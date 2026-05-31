@@ -778,8 +778,273 @@ button[type="submit"] i { margin-right: 12px; }
 .submit-note { color: var(--text-muted); font-style: italic; font-size: 0.9rem; margin-top: 1rem; }
 
 /* ============================================================
-   PROGRESS BAR
+   CANVAS DE DIBUJO VAMPIRESCO
    ============================================================ */
+.canvas-section {
+    margin: 3rem 0;
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    padding: 2rem;
+    background: rgba(0,0,0,0.35);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    /* Siempre visible aunque AOS lo intente ocultar */
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+.canvas-header { text-align: center; margin-bottom: 1.5rem; }
+.canvas-title {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(201,168,76,0.4);
+}
+.canvas-title i { color: var(--primary); margin-right: 10px; }
+.canvas-subtitle { color: var(--text-muted); font-style: italic; margin-top: 0.3rem; font-size: 0.95rem; }
+
+.canvas-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+.tool-group { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.tool-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0 !important;
+    font-weight: 400;
+}
+
+.color-palette { display: flex; gap: 6px; flex-wrap: wrap; }
+.color-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+.color-btn:hover, .color-btn.active {
+    border-color: var(--gold);
+    transform: scale(1.25);
+    box-shadow: 0 0 10px rgba(201,168,76,0.5);
+}
+
+.brush-sizes { display: flex; gap: 8px; align-items: center; }
+.brush-btn {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.4);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.brush-btn:hover, .brush-btn.active {
+    border-color: var(--primary-bright);
+    background: rgba(138,3,3,0.2);
+    color: var(--text);
+}
+
+.tool-action-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.4);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.tool-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--text);
+    background: rgba(138,3,3,0.15);
+}
+.tool-action-btn.danger:hover {
+    border-color: #c0392b;
+    background: rgba(192,57,43,0.2);
+    color: #e74c3c;
+}
+.tool-action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.canvas-wrapper {
+    position: relative;
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    overflow: hidden;
+    min-height: 240px;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(60,0,30,0.3) 0%, rgba(0,0,0,0.8) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(58,21,37,0.15) 30px),
+        repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(58,21,37,0.15) 30px);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.7);
+}
+#drawCanvas {
+    display: block;
+    width: 100%;
+    min-height: 240px;
+    cursor: crosshair;
+    touch-action: none;
+}
+.canvas-overlay-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+.canvas-overlay-hint i { font-size: 2rem; color: var(--border-bright); }
+.canvas-overlay-hint.hidden { opacity: 0; }
+
+.canvas-note {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+}
+.canvas-note i { color: var(--primary); margin-right: 5px; }
+kbd {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    background: rgba(138,3,3,0.2);
+    border: 1px solid var(--border-bright);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--text-dim);
+}
+
+/* Responsive canvas */
+@media (max-width: 480px) {
+    .canvas-section { padding: 1.2rem 0.8rem; margin: 2rem 0; }
+    .canvas-title { font-size: 1.1rem; letter-spacing: 1px; }
+    .canvas-subtitle { font-size: 0.82rem; }
+    .canvas-tools { padding: 0.7rem; gap: 0.7rem; flex-direction: column; align-items: stretch; }
+    .tool-group { flex-wrap: wrap; gap: 0.5rem; width: 100%; }
+    .tool-label { font-size: 0.7rem; width: 100%; }
+    .color-palette { gap: 5px; }
+    .color-btn { width: 34px; height: 34px; }
+    .brush-sizes { gap: 6px; }
+    .brush-btn { width: 40px; height: 40px; }
+    .tool-action-btn { padding: 8px 12px; font-size: 0.88rem; flex: 1; justify-content: center; }
+    .canvas-note { font-size: 0.78rem; }
+}
+
+
+/* ============================================================
+   MURCIÉLAGOS SECRETOS — Visibles y tocables
+   ============================================================ */
+.secret-bat-card {
+    display: flex !important;   /* nunca se oculta */
+    opacity: 1 !important;      /* AOS no puede ocultarla */
+    visibility: visible !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 1.5rem auto;
+    padding: 0.9rem 1.6rem;
+    max-width: 260px;
+    border: 1px dashed var(--border-bright);
+    border-radius: 50px;
+    background: rgba(138, 3, 3, 0.06);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+.secret-bat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(138,3,3,0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.secret-bat-card:hover::before, .secret-bat-card:active::before { opacity: 1; }
+.secret-bat-card:hover {
+    border-color: var(--primary-bright);
+    background: rgba(138, 3, 3, 0.12);
+    transform: scale(1.04);
+    box-shadow: 0 0 20px rgba(138,3,3,0.25);
+}
+.secret-bat-card:active { transform: scale(0.97); }
+
+/* Estado "abierto" — después de tocar */
+.secret-bat-card.opened {
+    border-style: solid;
+    border-color: var(--primary);
+    background: rgba(138,3,3,0.1);
+    max-width: 320px;
+    padding: 1.1rem 1.6rem;
+}
+
+.sbc-bat {
+    font-size: 1.6rem;
+    animation: sbcWiggle 1.8s ease-in-out infinite;
+    display: inline-block;
+    flex-shrink: 0;
+}
+@keyframes sbcWiggle {
+    0%,100% { transform: rotate(-8deg) scale(1); }
+    25%      { transform: rotate(8deg)  scale(1.1); }
+    50%      { transform: rotate(-4deg) scale(1.05); }
+    75%      { transform: rotate(6deg)  scale(1.08); }
+}
+
+.sbc-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.3s;
+}
+.secret-bat-card:hover .sbc-text { color: var(--text-dim); }
+
+/* Mensaje revelado dentro de la card */
+.sbc-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.5;
+    animation: msgFadeIn 0.5s ease;
+    display: none;
+    text-align: center;
+}
+.secret-bat-card.opened .sbc-message { display: block; }
+.secret-bat-card.opened .sbc-text    { display: none; }
+@keyframes msgFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
 .scroll-progress {
     position: fixed;
     top: 0; left: 0;

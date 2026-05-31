@@ -3,59 +3,40 @@
    Castlevania Dark Theme | Murciélagos | Canvas | Magia oscura
    ============================================================ */
 
-// ============================================================
-// MENSAJES OCULTOS — Solo para ella 🦇
-// ============================================================
-const secretMessages = [
-    "Hay algo en ti que me hace querer conocerte para siempre.",
-    "Tu sonrisa debería tener su propio nombre, porque es única en el mundo.",
-    "Eres de esas personas que hacen que la oscuridad se sienta más bonita.",
-    "Ojalá supieras lo especial que eres, en serio.",
-    "Si fuera un murciélago, rondaría tu castillo toda la eternidad. 🦇",
-    "Tienes algo mágico que no sé explicar, y me alegra no poder hacerlo.",
-];
-let secretIndex = 0;
-
-function showSecret(idx) {
-    const msg = document.getElementById('hiddenMsg');
-    msg.textContent = secretMessages[idx % secretMessages.length];
-    msg.classList.add('show');
-    setTimeout(() => msg.classList.remove('show'), 4500);
-}
 
 // ============================================================
 // PANTALLA DE INTRO — Castlevania Gate
 // ============================================================
 (function initIntro() {
-    const intro   = document.getElementById('introScreen');
+    const intro = document.getElementById('introScreen');
     const iCanvas = document.getElementById('introBatsCanvas');
-    const iCtx    = iCanvas.getContext('2d');
+    const iCtx = iCanvas.getContext('2d');
     let introBats = [];
     let introAnim;
 
     // ---- Bats del intro ----
     class IntroBat {
         constructor() {
-            this.x    = Math.random() * window.innerWidth;
-            this.y    = Math.random() * window.innerHeight * 0.7 + 50;
-            this.vx   = (Math.random() - 0.5) * 2.5;
-            this.vy   = (Math.random() - 0.5) * 1.2;
+            this.x = Math.random() * window.innerWidth;
+            this.y = Math.random() * window.innerHeight * 0.7 + 50;
+            this.vx = (Math.random() - 0.5) * 2.5;
+            this.vy = (Math.random() - 0.5) * 1.2;
             this.size = 8 + Math.random() * 14;
-            this.alpha= 0.4 + Math.random() * 0.5;
-            this.wingPhase   = Math.random() * Math.PI * 2;
-            this.wingSpeed   = 0.1 + Math.random() * 0.12;
+            this.alpha = 0.4 + Math.random() * 0.5;
+            this.wingPhase = Math.random() * Math.PI * 2;
+            this.wingSpeed = 0.1 + Math.random() * 0.12;
             this.wobblePhase = Math.random() * Math.PI * 2;
         }
 
         update() {
-            this.wingPhase   += this.wingSpeed;
+            this.wingPhase += this.wingSpeed;
             this.wobblePhase += 0.02;
             this.x += this.vx + Math.sin(this.wobblePhase) * 0.5;
             this.y += this.vy;
             // Rebotar
-            if (this.x < -50)  this.x = window.innerWidth  + 50;
-            if (this.x > window.innerWidth  + 50) this.x = -50;
-            if (this.y < -50)  this.y = window.innerHeight * 0.7;
+            if (this.x < -50) this.x = window.innerWidth + 50;
+            if (this.x > window.innerWidth + 50) this.x = -50;
+            if (this.y < -50) this.y = window.innerHeight * 0.7;
             if (this.y > window.innerHeight * 0.75) this.y = 50;
         }
 
@@ -67,8 +48,8 @@ function showSecret(idx) {
 
             // Sombra roja suave
             ctx.shadowColor = '#8a0303';
-            ctx.shadowBlur  = 6;
-            ctx.fillStyle   = '#1a0505';
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#1a0505';
 
             // Cuerpo
             ctx.beginPath();
@@ -79,26 +60,26 @@ function showSecret(idx) {
             ctx.beginPath();
             const w = Math.cos(this.wingPhase) * s;
             ctx.moveTo(0, 0);
-            ctx.bezierCurveTo( s*0.3, -s*0.6,  w,  -s*0.5, w, 0);
-            ctx.bezierCurveTo( w*0.6,  s*0.2,  s*0.2, s*0.15, 0, 0);
+            ctx.bezierCurveTo(s * 0.3, -s * 0.6, w, -s * 0.5, w, 0);
+            ctx.bezierCurveTo(w * 0.6, s * 0.2, s * 0.2, s * 0.15, 0, 0);
             ctx.fill();
             // Ala der
             ctx.scale(-1, 1);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.bezierCurveTo( s*0.3, -s*0.6,  w, -s*0.5, w, 0);
-            ctx.bezierCurveTo( w*0.6,  s*0.2,  s*0.2, s*0.15, 0, 0);
+            ctx.bezierCurveTo(s * 0.3, -s * 0.6, w, -s * 0.5, w, 0);
+            ctx.bezierCurveTo(w * 0.6, s * 0.2, s * 0.2, s * 0.15, 0, 0);
             ctx.fill();
 
             // Ojos
             ctx.scale(-1, 1);
-            ctx.shadowBlur  = 4;
-            ctx.fillStyle   = '#ff2222';
+            ctx.shadowBlur = 4;
+            ctx.fillStyle = '#ff2222';
             ctx.globalAlpha = this.alpha * 0.9;
             const e = s * 0.07;
             ctx.beginPath();
-            ctx.arc(-s*0.08, -s*0.1, e, 0, Math.PI*2);
-            ctx.arc( s*0.08, -s*0.1, e, 0, Math.PI*2);
+            ctx.arc(-s * 0.08, -s * 0.1, e, 0, Math.PI * 2);
+            ctx.arc(s * 0.08, -s * 0.1, e, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.restore();
@@ -106,7 +87,7 @@ function showSecret(idx) {
     }
 
     function resizeIntroCanvas() {
-        iCanvas.width  = window.innerWidth;
+        iCanvas.width = window.innerWidth;
         iCanvas.height = window.innerHeight;
     }
     resizeIntroCanvas();
@@ -119,12 +100,12 @@ function showSecret(idx) {
     function createDrips() {
         const container = document.getElementById('bloodDrips');
         for (let i = 0; i < 15; i++) {
-            const drip    = document.createElement('div');
-            drip.className= 'drip';
-            const left    = Math.random() * 100;
-            const height  = 40 + Math.random() * 120;
-            const dur     = 3 + Math.random() * 5;
-            const del     = Math.random() * -8;
+            const drip = document.createElement('div');
+            drip.className = 'drip';
+            const left = Math.random() * 100;
+            const height = 40 + Math.random() * 120;
+            const dur = 3 + Math.random() * 5;
+            const del = Math.random() * -8;
             drip.style.cssText = `
                 left: ${left}%;
                 height: ${height}px;
@@ -204,13 +185,13 @@ document.querySelectorAll('textarea').forEach(ta => {
 (function initParticles() {
     const container = document.getElementById('particles');
     for (let i = 0; i < 28; i++) {
-        const p    = document.createElement('div');
-        p.className= 'particle';
-        const x    = Math.random() * 100;
-        const dur  = 8 + Math.random() * 14;
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const x = Math.random() * 100;
+        const dur = 8 + Math.random() * 14;
         const size = 1 + Math.random() * 3;
-        const del  = Math.random() * -dur;
-        const isGold   = Math.random() < 0.08;
+        const del = Math.random() * -dur;
+        const isGold = Math.random() < 0.08;
         const isPurple = Math.random() < 0.15;
         p.style.cssText = `
             left: ${x}%;
@@ -218,7 +199,7 @@ document.querySelectorAll('textarea').forEach(ta => {
             animation-duration: ${dur}s;
             animation-delay: ${del}s;
             background: ${isGold ? '#c9a84c' : isPurple ? '#9b59b6' : '#8a0303'};
-            box-shadow: 0 0 ${size*2}px currentColor;
+            box-shadow: 0 0 ${size * 2}px currentColor;
         `;
         container.appendChild(p);
     }
@@ -229,10 +210,10 @@ document.querySelectorAll('textarea').forEach(ta => {
 // ============================================================
 (function initBats() {
     const canvas = document.getElementById('batsCanvas');
-    const ctx    = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
 
     function resize() {
-        canvas.width  = window.innerWidth;
+        canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
     resize();
@@ -247,29 +228,29 @@ document.querySelectorAll('textarea').forEach(ta => {
         reset() {
             if (this.burst) {
                 // Burst: salen desde el centro y se dispersan, ya visibles
-                this.x     = window.innerWidth  * (0.25 + Math.random() * 0.5);
-                this.y     = window.innerHeight * (0.35 + Math.random() * 0.25);
-                this.vx    = (Math.random() - 0.5) * 6;
-                this.vy    = -(1.5 + Math.random() * 4);
-                this.size  = 14 + Math.random() * 16;
+                this.x = window.innerWidth * (0.25 + Math.random() * 0.5);
+                this.y = window.innerHeight * (0.35 + Math.random() * 0.25);
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = -(1.5 + Math.random() * 4);
+                this.size = 14 + Math.random() * 16;
                 this.alpha = 0.55 + Math.random() * 0.35; // YA visibles desde el inicio
             } else {
                 // Normales: suben desde abajo
-                this.x     = -60 + Math.random() * (window.innerWidth + 120);
-                this.y     = window.innerHeight + 30;
-                this.vx    = (Math.random() - 0.5) * 1.4;
-                this.vy    = -(0.5 + Math.random() * 1.3);
-                this.size  = 7 + Math.random() * 11;
+                this.x = -60 + Math.random() * (window.innerWidth + 120);
+                this.y = window.innerHeight + 30;
+                this.vx = (Math.random() - 0.5) * 1.4;
+                this.vy = -(0.5 + Math.random() * 1.3);
+                this.size = 7 + Math.random() * 11;
                 this.alpha = 0; // Aparecen gradualmente
             }
-            this.wingPhase   = Math.random() * Math.PI * 2;
-            this.wingSpeed   = 0.11 + Math.random() * 0.1;
+            this.wingPhase = Math.random() * Math.PI * 2;
+            this.wingSpeed = 0.11 + Math.random() * 0.1;
             this.wobblePhase = Math.random() * Math.PI * 2;
-            this.alive       = true;
+            this.alive = true;
         }
 
         update() {
-            this.wingPhase   += this.wingSpeed;
+            this.wingPhase += this.wingSpeed;
             this.wobblePhase += 0.02;
             this.x += this.vx + Math.sin(this.wobblePhase) * 0.5;
             this.y += this.vy;
@@ -299,20 +280,20 @@ document.querySelectorAll('textarea').forEach(ta => {
             ctx.translate(this.x, this.y);
             ctx.globalAlpha = this.alpha;
             ctx.shadowColor = '#3a0000';
-            ctx.shadowBlur  = 4;
-            ctx.fillStyle   = '#1a0505';
+            ctx.shadowBlur = 4;
+            ctx.fillStyle = '#1a0505';
 
             // Cuerpo
             ctx.beginPath();
-            ctx.ellipse(0, 0, s*0.22, s*0.3, 0, 0, Math.PI*2);
+            ctx.ellipse(0, 0, s * 0.22, s * 0.3, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // Ala izquierda
             const w = Math.cos(this.wingPhase) * s;
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.bezierCurveTo(s*0.3, -s*0.6, w, -s*0.5, w, 0);
-            ctx.bezierCurveTo(w*0.6,  s*0.2, s*0.2, s*0.15, 0, 0);
+            ctx.bezierCurveTo(s * 0.3, -s * 0.6, w, -s * 0.5, w, 0);
+            ctx.bezierCurveTo(w * 0.6, s * 0.2, s * 0.2, s * 0.15, 0, 0);
             ctx.fill();
 
             // Ala derecha (espejo)
@@ -320,20 +301,20 @@ document.querySelectorAll('textarea').forEach(ta => {
             ctx.scale(-1, 1);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.bezierCurveTo(s*0.3, -s*0.6, w, -s*0.5, w, 0);
-            ctx.bezierCurveTo(w*0.6,  s*0.2, s*0.2, s*0.15, 0, 0);
+            ctx.bezierCurveTo(s * 0.3, -s * 0.6, w, -s * 0.5, w, 0);
+            ctx.bezierCurveTo(w * 0.6, s * 0.2, s * 0.2, s * 0.15, 0, 0);
             ctx.fill();
             ctx.restore();
 
             // Ojos brillantes
             ctx.shadowColor = '#ff0000';
-            ctx.shadowBlur  = 5;
-            ctx.fillStyle   = '#ff2222';
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = '#ff2222';
             ctx.globalAlpha = this.alpha * 0.95;
             const e = Math.max(1, s * 0.07);
             ctx.beginPath();
-            ctx.arc(-s*0.08, -s*0.1, e, 0, Math.PI*2);
-            ctx.arc( s*0.08, -s*0.1, e, 0, Math.PI*2);
+            ctx.arc(-s * 0.08, -s * 0.1, e, 0, Math.PI * 2);
+            ctx.arc(s * 0.08, -s * 0.1, e, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.restore();
@@ -374,23 +355,23 @@ document.querySelectorAll('textarea').forEach(ta => {
 // CANVAS DE DIBUJO — Con CTRL+Z y resize sin bugeo
 // ============================================================
 (function initDrawCanvas() {
-    const canvas    = document.getElementById('drawCanvas');
-    const ctx       = canvas.getContext('2d');
-    const hint      = document.getElementById('canvasHint');
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    const hint = document.getElementById('canvasHint');
     const dataInput = document.getElementById('canvasData');
-    const undoBtn   = document.getElementById('undoBtn');
+    const undoBtn = document.getElementById('undoBtn');
 
-    let drawing   = false;
-    let color     = '#e8e0e0';
+    let drawing = false;
+    let color = '#e8e0e0';
     let brushSize = 3;
-    let eraser    = false;
+    let eraser = false;
     let firstDraw = true;
-    let lastX     = 0;
-    let lastY     = 0;
+    let lastX = 0;
+    let lastY = 0;
 
     // ---- Historia para CTRL+Z ----
-    const history  = [];
-    let histIndex  = -1;
+    const history = [];
+    let histIndex = -1;
     const MAX_HIST = 40;
 
     function saveState() {
@@ -429,7 +410,7 @@ document.querySelectorAll('textarea').forEach(ta => {
         if (canvas.width === 0 || canvas._initialized !== true) {
             const w = Math.min(parentW, 900);
             const h = Math.min(360, Math.max(240, w * 0.5));
-            canvas.width  = w;
+            canvas.width = w;
             canvas.height = h;
             canvas._initialized = true;
             // Fondo base
@@ -451,13 +432,13 @@ document.querySelectorAll('textarea').forEach(ta => {
 
     // ---- Coordenadas correctas (escala CSS vs resolución interna) ----
     function getPos(e) {
-        const rect   = canvas.getBoundingClientRect();
-        const scaleX = canvas.width  / rect.width;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
-        const src    = e.touches ? e.touches[0] : e;
+        const src = e.touches ? e.touches[0] : e;
         return {
             x: (src.clientX - rect.left) * scaleX,
-            y: (src.clientY - rect.top)  * scaleY
+            y: (src.clientY - rect.top) * scaleY
         };
     }
 
@@ -480,19 +461,19 @@ document.querySelectorAll('textarea').forEach(ta => {
         e.preventDefault();
         const pos = getPos(e);
 
-        ctx.lineWidth   = brushSize;
-        ctx.lineCap     = 'round';
-        ctx.lineJoin    = 'round';
+        ctx.lineWidth = brushSize;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
 
         if (eraser) {
             ctx.globalCompositeOperation = 'destination-out';
             ctx.strokeStyle = 'rgba(0,0,0,1)';
-            ctx.shadowBlur  = 0;
+            ctx.shadowBlur = 0;
         } else {
             ctx.globalCompositeOperation = 'source-over';
             ctx.strokeStyle = color;
             ctx.shadowColor = color;
-            ctx.shadowBlur  = Math.min(brushSize * 0.6, 8);
+            ctx.shadowBlur = Math.min(brushSize * 0.6, 8);
         }
 
         ctx.lineTo(pos.x, pos.y);
@@ -514,15 +495,15 @@ document.querySelectorAll('textarea').forEach(ta => {
     }
 
     // Eventos mouse
-    canvas.addEventListener('mousedown',  startDraw);
-    canvas.addEventListener('mousemove',  draw);
-    canvas.addEventListener('mouseup',    stopDraw);
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
     canvas.addEventListener('mouseleave', stopDraw);
 
     // Eventos touch
     canvas.addEventListener('touchstart', startDraw, { passive: false });
-    canvas.addEventListener('touchmove',  draw,      { passive: false });
-    canvas.addEventListener('touchend',   stopDraw);
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDraw);
 
     // ---- CTRL+Z global ----
     document.addEventListener('keydown', (e) => {
@@ -545,7 +526,7 @@ document.querySelectorAll('textarea').forEach(ta => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            color  = btn.dataset.color;
+            color = btn.dataset.color;
             eraser = false;
             eraserBtn.style.cssText = '';
         });
@@ -565,8 +546,8 @@ document.querySelectorAll('textarea').forEach(ta => {
     eraserBtn.addEventListener('click', function () {
         eraser = !eraser;
         this.style.borderColor = eraser ? '#c0392b' : '';
-        this.style.background  = eraser ? 'rgba(192,57,43,0.2)' : '';
-        this.style.color       = eraser ? '#e74c3c' : '';
+        this.style.background = eraser ? 'rgba(192,57,43,0.2)' : '';
+        this.style.color = eraser ? '#e74c3c' : '';
     });
 
     // ---- Limpiar ----
@@ -583,16 +564,55 @@ document.querySelectorAll('textarea').forEach(ta => {
 })();
 
 // ============================================================
-// FORMULARIO — Submit con efectos
+// FORMULARIO — Submit via Web3Forms (fetch)
 // ============================================================
-document.getElementById('mainForm').addEventListener('submit', function () {
-    const canvas = document.getElementById('drawCanvas');
-    document.getElementById('canvasData').value = canvas.toDataURL('image/png');
+document.getElementById('mainForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...';
+
+    // Arrancar efectos visuales ya
     window.spawnBatBurst && window.spawnBatBurst(35);
-
     document.getElementById('bloodOverlay').classList.add('active');
-    setTimeout(() => document.getElementById('submitModal').classList.add('active'), 600);
+
+    // Preparar datos
+    const formData = new FormData(this);
+    // Usamos .set en lugar de .append para no duplicarlo si ya está en el HTML
+    formData.set("access_key", "d47a85cb-c0b3-4e2b-aa18-7625a394afb6");
+    // Convertir el canvas a texto (Base64) en lugar de archivo, 
+    // porque Web3Forms cobra por enviar archivos adjuntos (Pro feature)
+    const canvas = document.getElementById('drawCanvas');
+    if (canvas && canvas.width > 0) {
+        formData.set('Dibujo_Canvas', canvas.toDataURL('image/png'));
+    }
+
+    try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            setTimeout(() => document.getElementById('submitModal').classList.add('active'), 600);
+        } else {
+            // Error del servidor (ej. 400 Bad Request)
+            document.getElementById('bloodOverlay').classList.remove('active');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-scroll"></i> Sellar el Pacto';
+            alert('⚠️ Error de Web3Forms: ' + (data.message || 'Intenta de nuevo.'));
+        }
+    } catch (err) {
+        document.getElementById('bloodOverlay').classList.remove('active');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-scroll"></i> Sellar el Pacto';
+        alert('⚠️ Sin conexión. Verifica tu internet e intenta de nuevo.');
+    }
 });
 
 // ============================================================
@@ -607,51 +627,49 @@ document.head.appendChild(focusStyle);
 
 document.querySelectorAll('input[type="text"], textarea, select').forEach(el => {
     el.addEventListener('focus', function () { this.closest('.pregunta')?.classList.add('focused'); });
-    el.addEventListener('blur',  function () { this.closest('.pregunta')?.classList.remove('focused'); });
+    el.addEventListener('blur', function () { this.closest('.pregunta')?.classList.remove('focused'); });
 });
 
 // ============================================================
-// MENSAJES OCULTOS — Secretos escondidos para ella 🦇
+// MURCIÉLAGOS SECRETOS — Visibles, clickables, para ella 🦇
 // ============================================================
-(function initSecrets() {
-    let msgTimer = null;
-    let hoverTimer = null;
+const secretMessages = [
+    "Eres de esas personas que hacen que conocer a alguien valga la pena. En serio.",
+    "Hay algo en ti que hace que la oscuridad se sienta más bonita.",
+    "Ojalá supieras lo especial que eres. No lo digo porque sí.",
+    "Eres increíble y lo sabes.",
+];
 
-    function trigger(idx) {
-        clearTimeout(msgTimer);
-        showSecret(idx);
-        msgTimer = setTimeout(() => {}, 5000);
+window.revealSecret = function (card) {
+    if (card.classList.contains('opened')) return; // Ya abierta, no repetir
+
+    const idx = parseInt(card.dataset.msg) % secretMessages.length;
+    card.classList.add('opened');
+    card.onclick = null; // Desactivar click tras abrir
+
+    // Inyectar el mensaje dentro de la card
+    const msgEl = document.createElement('span');
+    msgEl.className = 'sbc-message';
+    msgEl.textContent = secretMessages[idx];
+    card.appendChild(msgEl);
+
+    // Pequeño burst de murciélagos 🦇
+    window.spawnBatBurst && window.spawnBatBurst(8);
+
+    // Animar el murciélago de la card
+    const bat = card.querySelector('.sbc-bat');
+    if (bat) {
+        bat.style.transition = 'transform 0.3s ease';
+        bat.style.transform = 'scale(1.8) rotate(15deg)';
+        setTimeout(() => { bat.style.transform = ''; }, 500);
     }
+};
 
-    // Hover 2s en elementos con data-secret para revelar mensaje
-    document.querySelectorAll('[data-secret]').forEach(el => {
-        let holdTimer = null;
-        el.addEventListener('mouseenter', function () {
-            holdTimer = setTimeout(() => {
-                trigger(secretIndex++ % secretMessages.length);
-            }, 1800);
-        });
-        el.addEventListener('mouseleave', () => clearTimeout(holdTimer));
-        el.addEventListener('touchstart', function (e) {
-            holdTimer = setTimeout(() => {
-                trigger(secretIndex++ % secretMessages.length);
-            }, 1800);
-        }, { passive: true });
-        el.addEventListener('touchend', () => clearTimeout(holdTimer));
-    });
+// Easter egg: click en el logo del header
+document.querySelector('.bat-logo')?.addEventListener('click', () => {
+    window.spawnBatBurst && window.spawnBatBurst(20);
+});
 
-    // Easter egg en el logo
-    document.querySelector('.bat-logo')?.addEventListener('click', () => {
-        window.spawnBatBurst && window.spawnBatBurst(20);
-        trigger(secretIndex++ % secretMessages.length);
-    });
-
-    // Consola — mensajes bonitos para quien inspeccione 🦇
-    const css1 = 'color:#c0392b;font-family:serif;font-size:18px;font-weight:bold;';
-    const css2 = 'color:#c9a84c;font-family:serif;font-size:14px;font-style:italic;';
-    const css3 = 'color:#a89090;font-family:serif;font-size:12px;';
-    console.log('%c🦇 Hola, curioso/a que mira el código...', css1);
-    console.log('%c"Eres de las personas que hacen que valga la pena conocer el mundo."', css2);
-    console.log('%cEste formulario fue hecho con cariño. Solo para ti.', css3);
-    console.log('%c— Hovea los ⸸ y 🦇 del formulario para encontrar más secretos.', css3);
-})();
+// Consola — para el curioso que inspeccione el código 🦇
+console.log('%c🦇 Hola, curioso/a...', 'color:#c0392b;font-size:18px;font-weight:bold;font-family:serif;');
+console.log('%c"Eres de las personas que hacen que valga la pena conocer el mundo."', 'color:#c9a84c;font-size:14px;font-style:italic;font-family:serif;');

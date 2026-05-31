@@ -15,6 +15,8 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+
+
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -89,9 +91,8 @@
                 <span class="intro-letter" style="--i:0">H</span><span class="intro-letter" style="--i:1">o</span><span
                     class="intro-letter" style="--i:2">l</span><span class="intro-letter" style="--i:3">a</span>
                 <span class="intro-space"> </span>
-                <span class="intro-letter" style="--i:5">b</span><span class="intro-letter" style="--i:6">o</span><span
-                    class="intro-letter" style="--i:7">n</span><span class="intro-letter" style="--i:8">i</span><span
-                    class="intro-letter" style="--i:7">t</span><span class="intro-letter" style="--i:8">a</span><span
+                <span class="intro-letter" style="--i:5">L</span><span class="intro-letter" style="--i:6">o</span><span
+                    class="intro-letter" style="--i:7">c</span><span class="intro-letter" style="--i:8">a</span><span
                     class="intro-letter" style="--i:9">...</span>
             </h1>
             <p class="intro-sub">Responde todo tonta</p>
@@ -120,8 +121,8 @@
     <div class="submit-modal" id="submitModal">
         <div class="modal-inner">
             <div class="modal-bats">🦇 🦇 🦇</div>
-            <h2>Las sombras llevan tus secretos...</h2>
-            <p>El conde ha recibido tus confesiones.</p>
+            <h2>Por fin...</h2>
+            <p>Tardaste mucho.</p>
             <div class="blood-seal"></div>
         </div>
     </div>
@@ -160,12 +161,12 @@
             </div>
         </header>
 
-        <!-- RECUERDA CAMBIAR EL CORREO AQUÍ -->
-        <form id="mainForm" action="https://formsubmit.co/sebastianchb16@gmail.com" method="POST">
-
-            <input type="hidden" name="_subject" value="🦇 Nuevas confesiones del cuestionario gótico 🦇">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://formsubmit.co/sebastianchb16@gmail.com">
+        <!-- Web3Forms — access key vinculada al correo -->
+        <form id="mainForm">
+            <input type="hidden" name="access_key" value="d47a85cb-c0b3-4e2b-aa18-7625a394afb6">
+            <input type="hidden" name="subject" value="🦇 Nuevas confesiones del cuestionario gótico 🦇">
+            <input type="hidden" name="from_name" value="Encuesta Gótica de Aline">
+            <input type="checkbox" name="botcheck" style="display:none">
 
             <!-- PREGUNTAS -->
             <div class="pregunta" data-aos="fade-up" data-aos-delay="50">
@@ -233,8 +234,14 @@
                 <textarea id="p10" name="10_Algo_Por_Aprender" rows="1" required></textarea>
             </div>
 
+            <!-- 🦇 MENSAJE SECRETO 1 — sin AOS para que siempre aparezca -->
+            <div class="secret-bat-card" data-msg="0" onclick="revealSecret(this)">
+                <span class="sbc-bat">🦇</span>
+                <span class="sbc-text">tócame</span>
+            </div>
+
             <div class="pregunta" data-aos="fade-up">
-                <label for="p11"><i class="fa-solid fa-heart" data-secret="3"></i> 11. ¿Tienes platónico?</label>
+                <label for="p11"><i class="fa-solid fa-heart"></i> 11. ¿Tienes platónico?</label>
                 <input type="text" id="p11" name="11_Platonico" required autocomplete="off">
             </div>
 
@@ -260,8 +267,14 @@
                 <input type="text" id="p15" name="15_Cancion_Favorita" required autocomplete="off">
             </div>
 
+            <!-- 🦇 MENSAJE SECRETO 2 — sin AOS para que siempre aparezca -->
+            <div class="secret-bat-card" data-msg="1" onclick="revealSecret(this)">
+                <span class="sbc-bat">🦇</span>
+                <span class="sbc-text">tócame</span>
+            </div>
+
             <div class="pregunta" data-aos="fade-up">
-                <label for="p16"><i class="fa-solid fa-star" data-secret="4"></i> 16. ¿Cosas que ames?</label>
+                <label for="p16"><i class="fa-solid fa-star"></i> 16. ¿Cosas que ames?</label>
                 <textarea id="p16" name="16_Cosas_Que_Amas" rows="1" required></textarea>
             </div>
 
@@ -314,11 +327,10 @@
                 <textarea id="p25" name="25_Lugar_Donde_Eres_Tu_Misma" rows="1" required></textarea>
             </div>
 
-            <!-- Divisor secreto — hover para mensaje -->
-            <div class="divider-fancy mid-divider" data-secret="6" data-aos="fade-up" style="margin: 2rem 0;">
-                <span class="divider-line"></span>
-                <span class="divider-icon">🦇</span>
-                <span class="divider-line"></span>
+            <!-- 🦇 MENSAJE SECRETO 3 — sin AOS para que siempre aparezca -->
+            <div class="secret-bat-card" data-msg="2" onclick="revealSecret(this)" style="margin-bottom: 2.5rem;">
+                <span class="sbc-bat">🦇</span>
+                <span class="sbc-text">tócame</span>
             </div>
 
             <!-- ===== CANVAS DE DIBUJO VAMPIRESCO ===== -->
@@ -389,7 +401,8 @@
 
                 <!-- Canvas data oculto para enviar con el form -->
                 <input type="hidden" name="Dibujo_Canvas" id="canvasData">
-                <p class="canvas-note"><i class="fa-solid fa-info-circle"></i> Tu dibujo se enviará junto con las respuestas &nbsp;·&nbsp; <kbd>Ctrl+Z</kbd> para deshacer</p>
+                <p class="canvas-note"><i class="fa-solid fa-info-circle"></i> Tu dibujo se enviará junto con las
+                    respuestas &nbsp;·&nbsp; <kbd>Ctrl+Z</kbd> para deshacer</p>
             </div>
 
             <!-- BOTÓN ENVIAR -->
