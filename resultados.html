@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 El Grimorio — Solo para el Conde</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg:      #060306;
+            --card:    #100810;
+            --primary: #8a0303;
+            --bright:  #c0392b;
+            --gold:    #c9a84c;
+            --text:    #ede0e0;
+            --muted:   #a89090;
+            --border:  #3a1525;
+            --glow:    0 0 30px rgba(138,3,3,0.5);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 50% 0%, #290a10 0%, transparent 55%),
+                radial-gradient(ellipse at 0%  100%, #1a0520 0%, transparent 45%);
+            color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            padding: 3rem 1rem;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ===== PANTALLA DE CONTRASEÑA ===== */
+        .gate {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at 50% 30%, #1a0510 0%, var(--bg) 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease;
+        }
+        .gate.unlocked {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gate-box {
+            text-align: center;
+            padding: 3rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            box-shadow: var(--glow), 0 20px 60px rgba(0,0,0,0.9);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .gate-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            animation: pulseLock 2s ease-in-out infinite;
+        }
+        @keyframes pulseLock {
+            0%,100% { text-shadow: 0 0 10px var(--primary); }
+            50%      { text-shadow: 0 0 30px var(--bright), 0 0 60px rgba(138,3,3,0.4); }
+        }
+
+        .gate-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+            letter-spacing: 2px;
+        }
+        .gate-sub { color: var(--muted); font-style: italic; margin-bottom: 1.8rem; font-size: 0.95rem; }
+
+        .gate-input {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 12px 16px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .gate-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(138,3,3,0.3);
+        }
+
+        .gate-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: var(--text);
+            border: none;
+            border-radius: 6px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .gate-btn:hover { background: var(--bright); box-shadow: var(--glow); }
+
+        .gate-error {
+            color: var(--bright);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-style: italic;
+        }
+        .gate-error.visible { opacity: 1; }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main { display: none; }
+        .main.visible { display: block; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(201,168,76,0.4);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+        .page-header p { color: var(--muted); font-style: italic; }
+
+        /* ===== CONTROLES ===== */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .ctrl-btn {
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            color: var(--muted);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ctrl-btn:hover { border-color: var(--primary); color: var(--text); background: rgba(138,3,3,0.15); }
+        .ctrl-btn.active { border-color: var(--primary); background: rgba(138,3,3,0.2); color: var(--text); }
+
+        .stats-bar {
+            margin-left: auto;
+            color: var(--muted);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESULTADOS ===== */
+        #resultsContainer .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--muted);
+        }
+        .empty-state i { font-size: 3rem; color: var(--border); margin-bottom: 1rem; display: block; }
+        .empty-state h3 { font-family: 'Cinzel', serif; color: var(--muted); margin-bottom: 0.5rem; }
+
+        /* Card de cada resultado */
+        .result-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+            transition: box-shadow 0.3s;
+        }
+        .result-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.8), 0 0 20px rgba(138,3,3,0.1); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(138,3,3,0.08);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            gap: 1rem;
+        }
+        .card-header:hover { background: rgba(138,3,3,0.13); }
+
+        .card-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            letter-spacing: 1px;
+        }
+        .card-name i { color: var(--primary); margin-right: 10px; }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .card-date { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+        .card-toggle { color: var(--primary); transition: transform 0.3s; }
+        .result-card.open .card-toggle { transform: rotate(180deg); }
+
+        .card-body {
+            display: none;
+            padding: 1.5rem;
+        }
+        .result-card.open .card-body { display: block; }
+
+        .answer-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(58,21,37,0.4);
+        }
+        .answer-item:last-child { border-bottom: none; }
+
+        .answer-q {
+            flex: 0 0 auto;
+            width: 26px;
+            height: 26px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .answer-content { flex: 1; }
+        .answer-label { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.2rem; font-style: italic; }
+        .answer-value { color: var(--text); }
+
+        .drawing-preview {
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .drawing-preview img {
+            width: 100%;
+            display: block;
+            border-radius: 6px;
+        }
+        .drawing-label {
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-btn {
+            margin-top: 1rem;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid #3b1515;
+            border-radius: 6px;
+            color: #7a4040;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .delete-btn:hover { border-color: var(--bright); color: var(--bright); background: rgba(192,57,43,0.1); }
+
+        /* Seccion vampiresca en card */
+        .vampire-answers {
+            margin-top: 1.2rem;
+            padding: 1rem 1.2rem;
+            background: rgba(138,3,3,0.05);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+        }
+        .vampire-answers-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .controls { flex-direction: column; align-items: flex-start; }
+            .stats-bar { margin-left: 0; }
+            .card-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PUERTA DE ACCESO ===== -->
+    <div class="gate" id="gate">
+        <div class="gate-box">
+            <div class="gate-icon"><i class="fa-solid fa-lock"></i></div>
+            <h2 class="gate-title">Acceso Restringido</h2>
+            <p class="gate-sub">Solo el conde puede leer estas confesiones</p>
+            <input type="password" class="gate-input" id="gateInput" placeholder="••••••••" maxlength="20">
+            <button class="gate-btn" onclick="checkPassword()">
+                <i class="fa-solid fa-door-open"></i> &nbsp; Abrir el Grimorio
+            </button>
+            <p class="gate-error" id="gateError">Acceso denegado. La oscuridad te rechaza.</p>
+        </div>
+    </div>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <div class="main" id="mainContent">
+        <div class="container">
+            <div class="page-header">
+                <h1>🦇 El Grimorio del Conde</h1>
+                <p>Las confesiones recopiladas de la noche</p>
+            </div>
+
+            <div class="controls">
+                <button class="ctrl-btn" onclick="exportAll()">
+                    <i class="fa-solid fa-file-export"></i> Exportar JSON
+                </button>
+                <button class="ctrl-btn" onclick="clearAll()">
+                    <i class="fa-solid fa-trash"></i> Borrar todo
+                </button>
+                <span class="stats-bar" id="statsBar">Cargando...</span>
+            </div>
+
+            <div id="resultsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // CONTRASEÑA — Cámbiala aquí. Solo tú debes saber esto.
+        // ============================================================
+        const SECRET_PASSWORD = 'Castlevania1476';
+
+        // ============================================================
+        // LLAVE DE ALMACENAMIENTO LOCAL
+        // ============================================================
+        const STORAGE_KEY = 'encuesta_gothic_results';
+
+        // ============================================================
+        // VERIFICACIÓN DE CONTRASEÑA
+        // ============================================================
+        function checkPassword() {
+            const val = document.getElementById('gateInput').value;
+            if (val === SECRET_PASSWORD) {
+                document.getElementById('gate').classList.add('unlocked');
+                document.getElementById('mainContent').classList.add('visible');
+                setTimeout(() => document.getElementById('gate').remove(), 900);
+                loadResults();
+            } else {
+                const err = document.getElementById('gateError');
+                err.classList.add('visible');
+                document.getElementById('gateInput').value = '';
+                document.getElementById('gateInput').style.borderColor = '#c0392b';
+                setTimeout(() => {
+                    err.classList.remove('visible');
+                    document.getElementById('gateInput').style.borderColor = '';
+                }, 2500);
+            }
+        }
+
+        document.getElementById('gateInput')?.addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // ============================================================
+        // CARGAR Y MOSTRAR RESULTADOS
+        // ============================================================
+        function loadResults() {
+            const data = getStoredResults();
+            renderResults(data);
+            updateStats(data);
+        }
+
+        function getStoredResults() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            } catch { return []; }
+        }
+
+        function renderResults(data) {
+            const container = document.getElementById('resultsContainer');
+
+            if (!data.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-scroll"></i>
+                        <h3>El Grimorio está vacío</h3>
+                        <p>Nadie ha respondido el cuestionario aún...</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = data.map((r, idx) => buildCard(r, idx)).join('');
+        }
+
+        function buildCard(result, idx) {
+            const name  = result['1_Nombre_Completo'] || result.nombre || '—';
+            const date  = result._timestamp
+                ? new Date(result._timestamp).toLocaleString('es-MX')
+                : 'Fecha desconocida';
+
+            // Campos normales (excluimos especiales)
+            const skipKeys = ['_timestamp', 'Dibujo_Canvas', '_id', '_next', '_subject', '_captcha'];
+            const vampirePrefix = ['V1_', 'V2_', 'V3_', 'V4_', 'V5_'];
+
+            const normalEntries  = Object.entries(result).filter(([k]) =>
+                !skipKeys.includes(k) && !vampirePrefix.some(p => k.startsWith(p))
+            );
+            const vampireEntries = Object.entries(result).filter(([k]) =>
+                vampirePrefix.some(p => k.startsWith(p))
+            );
+
+            const normalHTML = normalEntries.map(([k, v], i) => `
+                <div class="answer-item">
+                    <div class="answer-q">${i + 1}</div>
+                    <div class="answer-content">
+                        <div class="answer-label">${k.replace(/_/g, ' ')}</div>
+                        <div class="answer-value">${v || '—'}</div>
+                    </div>
+                </div>`).join('');
+
+            const vampireHTML = vampireEntries.length ? `
+                <div class="vampire-answers">
+                    <div class="vampire-answers-title">🦇 Confesiones del Alma</div>
+                    ${vampireEntries.map(([k, v]) => `
+                        <div class="answer-item">
+                            <div class="answer-content">
+                                <div class="answer-label">${k.replace(/_/g, ' ')}</div>
+                                <div class="answer-value">${v || '—'}</div>
+                            </div>
+                        </div>`).join('')}
+                </div>` : '';
+
+            const drawingHTML = result.Dibujo_Canvas ? `
+                <div style="margin-top:1.2rem">
+                    <div class="drawing-label"><i class="fa-solid fa-paintbrush" style="color:#c9a84c;margin-right:8px"></i>Su dibujo:</div>
+                    <div class="drawing-preview"><img src="${result.Dibujo_Canvas}" alt="Dibujo de ${name}"></div>
+                </div>` : '';
+
+            return `
+                <div class="result-card" id="card-${idx}">
+                    <div class="card-header" onclick="toggleCard(${idx})">
+                        <div class="card-name">
+                            <i class="fa-solid fa-scroll"></i>${name}
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-date">${date}</span>
+                            <i class="fa-solid fa-chevron-down card-toggle"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        ${normalHTML}
+                        ${vampireHTML}
+                        ${drawingHTML}
+                        <button class="delete-btn" onclick="deleteResult(${idx})">
+                            <i class="fa-solid fa-times"></i> Eliminar esta confesión
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        function toggleCard(idx) {
+            document.getElementById(`card-${idx}`)?.classList.toggle('open');
+        }
+
+        function updateStats(data) {
+            document.getElementById('statsBar').textContent =
+                `${data.length} confesión${data.length !== 1 ? 'es' : ''} recibida${data.length !== 1 ? 's' : ''}`;
+        }
+
+        // ============================================================
+        // ACCIONES
+        // ============================================================
+        function deleteResult(idx) {
+            if (!confirm('¿Eliminar esta confesión del Grimorio?')) return;
+            const data = getStoredResults();
+            data.splice(idx, 1);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            loadResults();
+        }
+
+        function clearAll() {
+            if (!confirm('¿Borrar TODAS las confesiones? Esta acción es irreversible.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            loadResults();
+        }
+
+        function exportAll() {
+            const data = getStoredResults();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = `grimorio_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ============================================================
+        // INTERCEPTAR RESULTADOS DE FORMSUBMIT
+        // (Cuando formsubmit redirecciona de vuelta, puede pasar datos
+        //  via URLSearchParams — esta parte guarda cualquier dato recibido)
+        // ============================================================
+        (function captureFormSubmitRedirect() {
+            const params = new URLSearchParams(window.location.search);
+            const entries = {};
+            let hasData = false;
+
+            params.forEach((val, key) => {
+                if (key !== 'timestamp') {
+                    entries[key] = val;
+                    hasData = true;
+                }
+            });
+
+            if (hasData) {
+                entries._timestamp = Date.now();
+                const data = getStoredResults();
+                data.push(entries);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                // Limpiar URL
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        })();
+    </script>
+</body>
+</html>

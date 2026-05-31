@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Aline... 🦇</title>
+    <meta name="description" content="Un cuestionario especial para conocerte mejor.">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+    <!-- ===== PANTALLA DE ENTRADA — Castlevania Intro ===== -->
+    <div id="introScreen">
+        <!-- Niebla -->
+        <div class="intro-fog"></div>
+        <div class="intro-fog intro-fog--2"></div>
+
+        <!-- Silueta del castillo -->
+        <div class="intro-castle">
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+                <!-- base montaña -->
+                <polygon points="0,400 180,180 260,260 400,80 540,260 620,180 800,400" fill="#0d0008" />
+                <!-- castillo central -->
+                <rect x="340" y="130" width="120" height="270" fill="#100010" />
+                <!-- Torre central -->
+                <rect x="370" y="60" width="60" height="100" fill="#0d0008" />
+                <polygon points="370,60 400,10 430,60" fill="#8a0303" />
+                <!-- ventanas torre -->
+                <rect x="390" y="75" width="20" height="30" fill="#ff330015" rx="2" />
+                <!-- Torres laterales izq -->
+                <rect x="280" y="180" width="60" height="220" fill="#100010" />
+                <rect x="292" y="140" width="36" height="60" fill="#0d0008" />
+                <polygon points="292,140 310,105 328,140" fill="#8a0303" />
+                <!-- Torres laterales der -->
+                <rect x="460" y="180" width="60" height="220" fill="#100010" />
+                <rect x="472" y="140" width="36" height="60" fill="#0d0008" />
+                <polygon points="472,140 490,105 508,140" fill="#8a0303" />
+                <!-- Torres extremo izq -->
+                <rect x="180" y="220" width="50" height="180" fill="#0d0008" />
+                <rect x="190" y="190" width="30" height="50" fill="#080006" />
+                <polygon points="190,190 205,160 220,190" fill="#6b0202" />
+                <!-- Torres extremo der -->
+                <rect x="570" y="220" width="50" height="180" fill="#0d0008" />
+                <rect x="580" y="190" width="30" height="50" fill="#080006" />
+                <polygon points="580,190 595,160 610,190" fill="#6b0202" />
+                <!-- Ventanas iluminadas castillo -->
+                <rect x="355" y="160" width="22" height="32" rx="11" fill="#ff3300" opacity="0.18" />
+                <rect x="423" y="160" width="22" height="32" rx="11" fill="#ff3300" opacity="0.15" />
+                <rect x="355" y="220" width="22" height="32" rx="11" fill="#ff3300" opacity="0.12" />
+                <rect x="423" y="220" width="22" height="32" rx="11" fill="#ff3300" opacity="0.12" />
+                <!-- Puerta -->
+                <rect x="381" y="330" width="38" height="70" rx="19" fill="#080006" />
+                <!-- Almenas -->
+                <rect x="340" y="125" width="10" height="15" fill="#100010" />
+                <rect x="355" y="125" width="10" height="15" fill="#100010" />
+                <rect x="370" y="125" width="10" height="15" fill="#100010" />
+                <rect x="420" y="125" width="10" height="15" fill="#100010" />
+                <rect x="435" y="125" width="10" height="15" fill="#100010" />
+                <rect x="450" y="125" width="10" height="15" fill="#100010" />
+                <!-- Luna llena detrás -->
+                <circle cx="400" cy="55" r="40" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.3" />
+            </svg>
+        </div>
+
+        <!-- Luna llena real -->
+        <div class="intro-moon"></div>
+
+        <!-- Gotas de sangre desde arriba -->
+        <div class="blood-drips" id="bloodDrips"></div>
+
+        <!-- Contenido central -->
+        <div class="intro-content">
+            <div class="intro-symbol">⸸</div>
+            <h1 class="intro-title">
+                <span class="intro-letter" style="--i:0">H</span><span class="intro-letter" style="--i:1">o</span><span
+                    class="intro-letter" style="--i:2">l</span><span class="intro-letter" style="--i:3">a</span>
+                <span class="intro-space"> </span>
+                <span class="intro-letter" style="--i:5">b</span><span class="intro-letter" style="--i:6">o</span><span
+                    class="intro-letter" style="--i:7">n</span><span class="intro-letter" style="--i:8">i</span><span
+                    class="intro-letter" style="--i:7">t</span><span class="intro-letter" style="--i:8">a</span><span
+                    class="intro-letter" style="--i:9">...</span>
+            </h1>
+            <p class="intro-sub">Responde todo tonta</p>
+            <button class="intro-enter-btn" id="enterBtn" onclick="enterSite()">
+                <span class="btn-glow"></span>
+                <i class="fa-solid fa-door-open"></i>
+                &nbsp; Entra &nbsp;
+                <i class="fa-solid fa-skull"></i>
+            </button>
+        </div>
+
+        <!-- Murciélagos del intro -->
+        <canvas id="introBatsCanvas"></canvas>
+    </div>
+
+    <!-- ===== BATS CANVAS (fondo principal) ===== -->
+    <canvas id="batsCanvas"></canvas>
+
+    <!-- ===== BLOOD DRIP OVERLAY ===== -->
+    <div class="blood-overlay" id="bloodOverlay"></div>
+
+    <!-- ===== PARTICLE AMBIENT ===== -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== MODAL ENVÍO ===== -->
+    <div class="submit-modal" id="submitModal">
+        <div class="modal-inner">
+            <div class="modal-bats">🦇 🦇 🦇</div>
+            <h2>Las sombras llevan tus secretos...</h2>
+            <p>El conde ha recibido tus confesiones.</p>
+            <div class="blood-seal"></div>
+        </div>
+    </div>
+
+    <!-- ===== MENSAJES OCULTOS — Tooltips mágicos ===== -->
+    <!-- Aparecen haciendo hover 3s sobre los ⸸ y elementos decorativos -->
+    <div class="hidden-msg" id="hiddenMsg"></div>
+
+    <!-- ===== MAIN CONTAINER ===== -->
+    <div class="container" id="mainContainer">
+
+        <!-- Decorative corner ornaments -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <header data-aos="fade-down" data-aos-duration="1200">
+            <div class="header-emblem">
+                <!-- 🦇 Hover aquí 3s para un secreto -->
+                <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="bat-logo" data-secret="1" title="">
+                    <path
+                        d="M60 40 C50 20 20 15 5 25 C20 28 30 35 35 45 C40 30 50 28 60 40 C70 28 80 30 85 45 C90 35 100 28 115 25 C100 15 70 20 60 40Z"
+                        fill="#8a0303" />
+                    <ellipse cx="60" cy="42" rx="8" ry="10" fill="#8a0303" />
+                    <circle cx="57" cy="38" r="2" fill="#ff0000" />
+                    <circle cx="63" cy="38" r="2" fill="#ff0000" />
+                </svg>
+            </div>
+            <h1>Como te quiero conocer</h1>
+            <p class="header-sub">Responde sinceramente.<br><em>Tómate tu tiempo</em></p>
+            <div class="divider-fancy" data-secret="2">
+                <span class="divider-line"></span>
+                <span class="divider-icon">⸸</span>
+                <span class="divider-line"></span>
+            </div>
+        </header>
+
+        <!-- RECUERDA CAMBIAR EL CORREO AQUÍ -->
+        <form id="mainForm" action="https://formsubmit.co/sebastianchb16@gmail.com" method="POST">
+
+            <input type="hidden" name="_subject" value="🦇 Nuevas confesiones del cuestionario gótico 🦇">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://formsubmit.co/sebastianchb16@gmail.com">
+
+            <!-- PREGUNTAS -->
+            <div class="pregunta" data-aos="fade-up" data-aos-delay="50">
+                <label for="p1"><i class="fa-solid fa-signature"></i> 1. ¿Cuál es tu nombre completo?</label>
+                <input type="text" id="p1" name="1_Nombre_Completo" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p2"><i class="fa-solid fa-utensils"></i> 2. ¿Te gusta cocinar o prefieres pedir
+                    comida?</label>
+                <textarea id="p2" name="2_Cocinar_o_Pedir" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p3"><i class="fa-solid fa-ice-cream"></i> 3. ¿Cuál es tu postre favorito?</label>
+                <input type="text" id="p3" name="3_Postre_Favorito" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p4"><i class="fa-solid fa-leaf"></i> 4. ¿Cuál es tu estación del año favorita?</label>
+                <input type="text" id="p4" name="4_Estacion_Favorita" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p5"><i class="fa-solid fa-temperature-half"></i> 5. ¿Prefieres el frío o el calor?</label>
+                <div class="select-wrapper">
+                    <select id="p5" name="5_Frio_o_Calor" required>
+                        <option value="" disabled selected>Elige tu bando...</option>
+                        <option value="Frío">El frío ❄️</option>
+                        <option value="Calor">El calor ☀️</option>
+                        <option value="Depende">Depende</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p6"><i class="fa-solid fa-music"></i> 6. ¿Tienes algún gusto culposo (música, comida,
+                    películas)?</label>
+                <textarea id="p6" name="6_Gusto_Culposo" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p7"><i class="fa-solid fa-eye"></i> 7. ¿Qué es lo primero que notas en alguien cuando lo
+                    conoces?</label>
+                <textarea id="p7" name="7_Lo_Primero_Que_Notas" rows="1" required></textarea>
+            </div>
+
+            <!-- Mensaje oculto #3 — hover en el ojo de la pregunta 7 -->
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p8"><i class="fa-solid fa-ban"></i> 8. ¿Qué hábito o actitud no soportas en otras
+                    personas?</label>
+                <textarea id="p8" name="8_Lo_Que_No_Soportas" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p9"><i class="fa-solid fa-face-laugh-squint"></i> 9. ¿Qué es lo que más te hace reír a
+                    carcajadas?</label>
+                <textarea id="p9" name="9_Lo_Que_Te_Hace_Reir" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p10"><i class="fa-solid fa-book-open"></i> 10. ¿Qué es algo que siempre has querido aprender
+                    a hacer pero aún no lo intentas?</label>
+                <textarea id="p10" name="10_Algo_Por_Aprender" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p11"><i class="fa-solid fa-heart" data-secret="3"></i> 11. ¿Tienes platónico?</label>
+                <input type="text" id="p11" name="11_Platonico" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p12"><i class="fa-solid fa-hand-holding-heart"></i> 12. ¿Cómo demuestras tú el cariño cuando
+                    alguien realmente te importa?</label>
+                <textarea id="p12" name="12_Como_Demuestras_Carino" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p13"><i class="fa-solid fa-comments"></i> 13. ¿Prefieres que te digan las cosas directamente
+                    o de una manera más indirecta?</label>
+                <textarea id="p13" name="13_Directa_o_Indirecta" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p14"><i class="fa-solid fa-film"></i> 14. ¿Cuál es tu película favorita?</label>
+                <input type="text" id="p14" name="14_Pelicula_Favorita" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p15"><i class="fa-solid fa-headphones"></i> 15. ¿Canción favorita?</label>
+                <input type="text" id="p15" name="15_Cancion_Favorita" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p16"><i class="fa-solid fa-star" data-secret="4"></i> 16. ¿Cosas que ames?</label>
+                <textarea id="p16" name="16_Cosas_Que_Amas" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p17"><i class="fa-solid fa-palette"></i> 17. ¿Color de ojos y de cabello?</label>
+                <input type="text" id="p17" name="17_Ojos_y_Cabello" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p18"><i class="fa-solid fa-church"></i> 18. ¿Eres religiosa?</label>
+                <input type="text" id="p18" name="18_Religiosa" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p19"><i class="fa-solid fa-bolt"></i> 19. ¿Qué te pone nerviosa?</label>
+                <textarea id="p19" name="19_Que_Te_Pone_Nerviosa" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p20"><i class="fa-solid fa-virus"></i> 20. ¿Tienes alergias?</label>
+                <input type="text" id="p20" name="20_Alergias" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p21"><i class="fa-solid fa-ruler-vertical"></i> 21. ¿Cuál es tu estatura?</label>
+                <input type="text" id="p21" name="21_Estatura" required autocomplete="off">
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p22"><i class="fa-solid fa-chess-knight"></i> 22. ¿Tienes algún pasatiempo o afición que
+                    casi nadie conoce?</label>
+                <textarea id="p22" name="22_Pasatiempo_Oculto" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p23"><i class="fa-solid fa-mask"></i> 23. ¿Cuál crees que es la primera impresión que le das
+                    a la gente cuando te acaban de conocer?</label>
+                <textarea id="p23" name="23_Primera_Impresion" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p24"><i class="fa-solid fa-hourglass-half"></i> 24. Si tuvieras la oportunidad de darle un
+                    solo consejo a tu 'yo' de hace 5 años, ¿qué le dirías?</label>
+                <textarea id="p24" name="24_Consejo_A_Tu_Yo_Pasado" rows="1" required></textarea>
+            </div>
+
+            <div class="pregunta" data-aos="fade-up">
+                <label for="p25"><i class="fa-solid fa-feather-pointed" data-secret="5"></i> 25. ¿Haciendo qué
+                    actividad, o en qué lugar, sientes que eres 100% tú misma?</label>
+                <textarea id="p25" name="25_Lugar_Donde_Eres_Tu_Misma" rows="1" required></textarea>
+            </div>
+
+            <!-- Divisor secreto — hover para mensaje -->
+            <div class="divider-fancy mid-divider" data-secret="6" data-aos="fade-up" style="margin: 2rem 0;">
+                <span class="divider-line"></span>
+                <span class="divider-icon">🦇</span>
+                <span class="divider-line"></span>
+            </div>
+
+            <!-- ===== CANVAS DE DIBUJO VAMPIRESCO ===== -->
+            <div class="canvas-section" data-aos="fade-up" data-aos-duration="1200">
+                <div class="canvas-header">
+                    <h3 class="canvas-title">
+                        <i class="fa-solid fa-paintbrush"></i>
+                        El Grimorio del Arte
+                    </h3>
+                    <p class="canvas-subtitle">Dibuja algo, deja tu marca en el pergamino oscuro...</p>
+                </div>
+
+                <div class="canvas-tools">
+                    <div class="tool-group">
+                        <label class="tool-label">Color</label>
+                        <div class="color-palette">
+                            <button type="button" class="color-btn active" data-color="#e8e0e0"
+                                style="background:#e8e0e0" title="Blanco luna"></button>
+                            <button type="button" class="color-btn" data-color="#8a0303" style="background:#8a0303"
+                                title="Rojo sangre"></button>
+                            <button type="button" class="color-btn" data-color="#c0392b" style="background:#c0392b"
+                                title="Escarlata"></button>
+                            <button type="button" class="color-btn" data-color="#9b59b6" style="background:#9b59b6"
+                                title="Violeta oscuro"></button>
+                            <button type="button" class="color-btn" data-color="#2c3e50" style="background:#2c3e50"
+                                title="Azul noche"></button>
+                            <button type="button" class="color-btn" data-color="#f39c12" style="background:#f39c12"
+                                title="Oro maldito"></button>
+                            <button type="button" class="color-btn" data-color="#27ae60" style="background:#27ae60"
+                                title="Verde veneno"></button>
+                            <button type="button" class="color-btn" data-color="#0d0006"
+                                style="background:#0d0006;border:1px solid #3b1f22" title="Negro abismo"></button>
+                        </div>
+                    </div>
+                    <div class="tool-group">
+                        <label class="tool-label">Pincel</label>
+                        <div class="brush-sizes">
+                            <button type="button" class="brush-btn active" data-size="3" title="Fino"><span
+                                    style="width:3px;height:3px;border-radius:50%;background:currentColor;display:inline-block"></span></button>
+                            <button type="button" class="brush-btn" data-size="8" title="Mediano"><span
+                                    style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block"></span></button>
+                            <button type="button" class="brush-btn" data-size="16" title="Grueso"><span
+                                    style="width:16px;height:16px;border-radius:50%;background:currentColor;display:inline-block"></span></button>
+                            <button type="button" class="brush-btn" data-size="30" title="Enorme"><span
+                                    style="width:24px;height:24px;border-radius:50%;background:currentColor;display:inline-block"></span></button>
+                        </div>
+                    </div>
+                    <div class="tool-group">
+                        <button type="button" id="undoBtn" class="tool-action-btn" title="Deshacer (Ctrl+Z)">
+                            <i class="fa-solid fa-rotate-left"></i> Deshacer
+                        </button>
+                        <button type="button" id="eraserBtn" class="tool-action-btn" title="Borrador">
+                            <i class="fa-solid fa-eraser"></i> Borrador
+                        </button>
+                        <button type="button" id="clearBtn" class="tool-action-btn danger" title="Limpiar">
+                            <i class="fa-solid fa-trash"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="drawCanvas"></canvas>
+                    <div class="canvas-overlay-hint" id="canvasHint">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Toca para comenzar a dibujar</span>
+                    </div>
+                </div>
+
+                <!-- Canvas data oculto para enviar con el form -->
+                <input type="hidden" name="Dibujo_Canvas" id="canvasData">
+                <p class="canvas-note"><i class="fa-solid fa-info-circle"></i> Tu dibujo se enviará junto con las respuestas &nbsp;·&nbsp; <kbd>Ctrl+Z</kbd> para deshacer</p>
+            </div>
+
+            <!-- BOTÓN ENVIAR -->
+            <div class="btn-container" data-aos="zoom-in" data-aos-delay="200">
+                <button type="submit" id="submitBtn">
+                    <i class="fa-solid fa-scroll"></i>
+                    Sellar el Pacto
+                </button>
+                <p class="submit-note">Las sombras guardarán tus secretos...</p>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>

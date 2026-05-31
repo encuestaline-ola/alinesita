@@ -1,0 +1,1048 @@
+/* ============================================================
+   VARIABLES GÓTICAS — CASTLEVANIA DARK THEME
+   ============================================================ */
+:root {
+    --bg:            #060306;
+    --bg2:           #0d070d;
+    --card-bg:       #100810;
+    --card-bg2:      #160d18;
+    --primary:       #8a0303;
+    --primary-bright:#c0392b;
+    --primary-glow:  rgba(138, 3, 3, 0.55);
+    --primary-glow2: rgba(192, 57, 43, 0.3);
+    --gold:          #c9a84c;
+    --gold-dim:      #7a6030;
+    --purple:        #4a1060;
+    --purple-bright: #9b59b6;
+    --text:          #ede0e0;
+    --text-dim:      #a89090;
+    --text-muted:    #6b5555;
+    --border:        #3a1525;
+    --border-bright: #5c2535;
+    --glow:          0 0 20px rgba(138, 3, 3, 0.5);
+    --glow-lg:       0 0 50px rgba(138, 3, 3, 0.35), 0 0 100px rgba(138, 3, 3, 0.15);
+    --shadow:        0 20px 60px rgba(0,0,0,0.9);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(ellipse at 50% 0%,   #290a10 0%, transparent 60%),
+        radial-gradient(ellipse at 0%  100%, #1a0520 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 50%, #120220 0%, transparent 40%);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    padding: 3rem 1rem 5rem;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   SCROLLBAR GÓTICO
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* ============================================================
+   ██████  PANTALLA DE INTRO — Castlevania Gate
+   ============================================================ */
+#introScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #040106;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    transition: opacity 1s ease, transform 1s ease;
+}
+#introScreen.exit {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.04);
+}
+
+/* Niebla */
+.intro-fog {
+    position: absolute;
+    bottom: 0; left: -20%;
+    width: 140%;
+    height: 35%;
+    background: radial-gradient(ellipse at 50% 100%, rgba(20,0,20,0.9) 0%, transparent 70%);
+    animation: fogDrift 12s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+.intro-fog--2 {
+    height: 25%;
+    opacity: 0.6;
+    animation-delay: -6s;
+    animation-direction: alternate-reverse;
+}
+@keyframes fogDrift {
+    from { transform: translateX(-5%) scaleY(1); }
+    to   { transform: translateX(5%)  scaleY(1.15); }
+}
+
+/* Luna */
+.intro-moon {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #fff8dc, #c9a84c 40%, #7a5a20 100%);
+    box-shadow: 0 0 40px rgba(201,168,76,0.5), 0 0 100px rgba(201,168,76,0.2);
+    animation: moonGlow 4s ease-in-out infinite alternate;
+}
+@keyframes moonGlow {
+    from { box-shadow: 0 0 40px rgba(201,168,76,0.5), 0 0 80px rgba(201,168,76,0.2); }
+    to   { box-shadow: 0 0 60px rgba(201,168,76,0.7), 0 0 120px rgba(201,168,76,0.3); }
+}
+
+/* Castillo SVG */
+.intro-castle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(900px, 100vw);
+    opacity: 0;
+    animation: castleReveal 2s ease 0.5s forwards;
+    pointer-events: none;
+}
+@keyframes castleReveal {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.intro-castle svg { display: block; width: 100%; }
+
+/* Gotas de sangre */
+.blood-drips {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    pointer-events: none;
+    height: 100%;
+    overflow: hidden;
+}
+.drip {
+    position: absolute;
+    top: -30px;
+    width: 3px;
+    border-radius: 0 0 50% 50%;
+    background: linear-gradient(to bottom, #8a0303, #c0392b);
+    animation: dripFall linear infinite;
+    box-shadow: 0 0 6px rgba(138,3,3,0.6);
+}
+@keyframes dripFall {
+    0%   { top: -30px; opacity: 0.8; }
+    85%  { opacity: 0.8; }
+    100% { top: 110vh;  opacity: 0; }
+}
+
+/* Canvas murciélagos del intro */
+#introBatsCanvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Contenido central del intro */
+.intro-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    animation: contentRise 1.5s ease 1.2s both;
+}
+@keyframes contentRise {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.intro-symbol {
+    font-size: 2.5rem;
+    color: var(--primary);
+    text-shadow: 0 0 20px var(--primary);
+    margin-bottom: 1rem;
+    animation: symbolPulse 2s ease-in-out infinite alternate;
+}
+@keyframes symbolPulse {
+    from { text-shadow: 0 0 10px var(--primary); transform: scale(1); }
+    to   { text-shadow: 0 0 30px var(--primary-bright), 0 0 60px rgba(138,3,3,0.4); transform: scale(1.1); }
+}
+
+.intro-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    color: var(--text);
+    letter-spacing: 4px;
+    text-shadow: 0 0 40px var(--primary-glow), 0 4px 20px rgba(0,0,0,0.9);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.intro-letter {
+    display: inline-block;
+    opacity: 0;
+    animation: letterDrop 0.5s ease calc(1.5s + var(--i) * 0.08s) forwards;
+}
+.intro-space { display: inline-block; width: 0.4em; }
+@keyframes letterDrop {
+    from { opacity: 0; transform: translateY(-20px) rotateX(90deg); }
+    to   { opacity: 1; transform: translateY(0)    rotateX(0deg); }
+}
+
+.intro-sub {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 2.5s forwards;
+}
+
+/* Botón entrar */
+.intro-enter-btn {
+    position: relative;
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--primary);
+    padding: 16px 48px;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    opacity: 0;
+    animation: fadeIn 1s ease 2.8s forwards;
+}
+.intro-enter-btn:hover {
+    background: var(--primary);
+    color: var(--text);
+    box-shadow: 0 0 50px var(--primary-glow), 0 0 100px rgba(138,3,3,0.2);
+    letter-spacing: 6px;
+    transform: scale(1.04);
+}
+.btn-glow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: btnShimmer 2.5s linear infinite;
+}
+@keyframes btnShimmer {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(100%); }
+}
+
+.intro-hint {
+    margin-top: 1.2rem;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.85rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 3.2s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================================================
+   BATS CANVAS (fondo principal)
+   ============================================================ */
+#batsCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ============================================================
+   PARTÍCULAS AMBIENTALES
+   ============================================================ */
+.particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatParticle linear infinite;
+}
+@keyframes floatParticle {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ============================================================
+   BLOOD OVERLAY
+   ============================================================ */
+.blood-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, #8a0303 0%, #3a0010 40%, transparent 70%);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+.blood-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+    animation: bloodDrip 0.8s ease forwards;
+}
+@keyframes bloodDrip {
+    0%   { clip-path: ellipse(60% 0% at 50% 0%); }
+    100% { clip-path: ellipse(120% 120% at 50% 0%); }
+}
+
+/* ============================================================
+   SUBMIT MODAL
+   ============================================================ */
+.submit-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease 0.5s;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+}
+.submit-modal.active { opacity: 1; pointer-events: all; }
+.modal-inner {
+    text-align: center;
+    padding: 3rem;
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    background: var(--card-bg2);
+    box-shadow: var(--glow-lg);
+    max-width: 420px;
+    animation: modalAppear 0.6s ease 0.7s both;
+}
+@keyframes modalAppear {
+    from { transform: scale(0.7) translateY(-40px); opacity: 0; }
+    to   { transform: scale(1)   translateY(0);     opacity: 1; }
+}
+.modal-bats { font-size: 2.5rem; margin-bottom: 1rem; animation: batFlap 0.4s infinite alternate; }
+@keyframes batFlap {
+    from { letter-spacing: 10px; }
+    to   { letter-spacing: 20px; }
+}
+.modal-inner h2 { font-family: 'Cinzel', serif; color: var(--primary-bright); font-size: 1.6rem; margin-bottom: 0.5rem; }
+.modal-inner p  { color: var(--text-dim); font-style: italic; }
+.blood-seal {
+    width: 60px; height: 60px;
+    background: var(--primary);
+    border-radius: 50%;
+    margin: 1.5rem auto 0;
+    box-shadow: 0 0 30px var(--primary-glow);
+    animation: sealPulse 1.5s infinite alternate;
+}
+@keyframes sealPulse {
+    from { transform: scale(1);    box-shadow: 0 0 20px var(--primary-glow); }
+    to   { transform: scale(1.15); box-shadow: 0 0 50px var(--primary-glow); }
+}
+
+/* ============================================================
+   MENSAJES OCULTOS
+   ============================================================ */
+.hidden-msg {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(135deg, rgba(20,4,20,0.97), rgba(40,0,20,0.97));
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 1rem 1.8rem;
+    color: var(--text);
+    font-style: italic;
+    font-size: 1rem;
+    max-width: 340px;
+    text-align: center;
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 0 30px rgba(138,3,3,0.4), 0 10px 40px rgba(0,0,0,0.8);
+    line-height: 1.5;
+}
+.hidden-msg.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.hidden-msg::before {
+    content: '🦇';
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+}
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 740px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, var(--card-bg2) 0%, var(--card-bg) 100%);
+    padding: 3.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow), var(--glow-lg), inset 0 0 80px rgba(0,0,0,0.5);
+}
+
+/* Ornamentos de esquina */
+.corner {
+    position: absolute;
+    width: 40px; height: 40px;
+    border-color: var(--gold-dim);
+    border-style: solid;
+    opacity: 0.6;
+}
+.corner-tl { top: 12px; left: 12px;  border-width: 2px 0 0 2px; }
+.corner-tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+.corner-bl { bottom: 12px; left: 12px;  border-width: 0 0 2px 2px; }
+.corner-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header { text-align: center; margin-bottom: 3.5rem; }
+
+.bat-logo {
+    width: 90px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 12px var(--primary));
+    animation: batPulse 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.bat-logo:hover { transform: scale(1.1); }
+@keyframes batPulse {
+    0%, 100% { filter: drop-shadow(0 0 8px var(--primary)); }
+    50%       { filter: drop-shadow(0 0 24px var(--primary-bright)); }
+}
+
+h1 {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--text);
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    margin-bottom: 0.6rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 30px var(--primary-glow), 0 2px 10px rgba(0,0,0,0.8);
+    line-height: 1.3;
+}
+
+.header-sub {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.divider-fancy {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 auto;
+    max-width: 300px;
+    cursor: pointer;
+}
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+.divider-icon {
+    font-size: 1.4rem;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary);
+    transition: transform 0.4s ease, text-shadow 0.4s;
+}
+.divider-fancy:hover .divider-icon {
+    transform: scale(1.3) rotate(10deg);
+    text-shadow: 0 0 20px var(--primary-bright);
+}
+
+/* ============================================================
+   PREGUNTAS
+   ============================================================ */
+.pregunta { margin-bottom: 2.2rem; position: relative; }
+
+label {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.3px;
+    font-size: 1.05rem;
+    transition: color 0.3s;
+}
+label i {
+    color: var(--primary);
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+    transition: text-shadow 0.3s;
+    cursor: default;
+}
+.pregunta:hover label { color: #f5e8e8; }
+.pregunta:hover label i { text-shadow: 0 0 8px var(--primary); }
+
+/* Icono secreto — cursor pointer */
+label i[data-secret] { cursor: help; }
+
+/* ============================================================
+   INPUTS, TEXTAREAS, SELECT
+   ============================================================ */
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    background: rgba(10, 3, 10, 0.6);
+    border: none;
+    border-bottom: 2px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    transition: all 0.35s ease;
+    border-radius: 4px 4px 0 0;
+    letter-spacing: 0.3px;
+}
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-bottom-color: var(--primary-bright);
+    background: rgba(138, 3, 3, 0.07);
+    box-shadow: 0 6px 20px -8px var(--primary-bright);
+}
+textarea { resize: none; overflow: hidden; }
+
+/* ============================================================
+   SELECT CUSTOM
+   ============================================================ */
+.select-wrapper { position: relative; }
+.select-wrapper .select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary);
+    pointer-events: none;
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+.select-wrapper:focus-within .select-arrow { transform: translateY(-50%) rotate(180deg); }
+select { appearance: none; cursor: pointer; padding-right: 40px; }
+option { background: var(--card-bg); color: var(--text); }
+
+/* ============================================================
+   CANVAS DE DIBUJO
+   ============================================================ */
+.canvas-section {
+    margin: 3rem 0;
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    padding: 2rem;
+    background: rgba(0,0,0,0.35);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.canvas-header { text-align: center; margin-bottom: 1.5rem; }
+.canvas-title {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(201, 168, 76, 0.4);
+}
+.canvas-title i { color: var(--primary); margin-right: 10px; }
+.canvas-subtitle { color: var(--text-muted); font-style: italic; margin-top: 0.3rem; font-size: 0.95rem; }
+
+.canvas-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+.tool-group { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.tool-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0 !important;
+    font-weight: 400;
+}
+
+.color-palette { display: flex; gap: 6px; flex-wrap: wrap; }
+.color-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+.color-btn:hover, .color-btn.active {
+    border-color: var(--gold);
+    transform: scale(1.25);
+    box-shadow: 0 0 10px rgba(201,168,76,0.5);
+}
+
+.brush-sizes { display: flex; gap: 8px; align-items: center; }
+.brush-btn {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.4);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.brush-btn:hover, .brush-btn.active {
+    border-color: var(--primary-bright);
+    background: rgba(138,3,3,0.2);
+    color: var(--text);
+}
+
+.tool-action-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.4);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.tool-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--text);
+    background: rgba(138,3,3,0.15);
+}
+.tool-action-btn.danger:hover {
+    border-color: #c0392b;
+    background: rgba(192,57,43,0.2);
+    color: #e74c3c;
+}
+.tool-action-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.canvas-wrapper {
+    position: relative;
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(60,0,30,0.3) 0%, rgba(0,0,0,0.8) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(58,21,37,0.15) 30px),
+        repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(58,21,37,0.15) 30px);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.7);
+}
+#drawCanvas {
+    display: block;
+    width: 100%;
+    cursor: crosshair;
+    touch-action: none;
+}
+.canvas-overlay-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+.canvas-overlay-hint i { font-size: 2rem; color: var(--border-bright); }
+.canvas-overlay-hint.hidden { opacity: 0; }
+
+.canvas-note {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+}
+.canvas-note i { color: var(--primary); margin-right: 5px; }
+kbd {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    background: rgba(138,3,3,0.2);
+    border: 1px solid var(--border-bright);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--text-dim);
+}
+
+/* ============================================================
+   BOTÓN ENVIAR
+   ============================================================ */
+.btn-container { text-align: center; margin-top: 4rem; }
+
+button[type="submit"] {
+    position: relative;
+    background: transparent;
+    color: var(--primary-bright);
+    border: 2px solid var(--primary);
+    padding: 16px 52px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.5s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px);
+    overflow: hidden;
+}
+button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(138,3,3,0.15) 50%, transparent 70%);
+    transform: translateX(-100%) skew(-20deg);
+    transition: transform 0.6s ease;
+}
+button[type="submit"]:hover {
+    background: var(--primary);
+    color: var(--text);
+    box-shadow: 0 0 40px var(--primary-glow), 0 0 80px rgba(138,3,3,0.2);
+    transform: translateY(-3px);
+    letter-spacing: 5px;
+}
+button[type="submit"]:hover::before { transform: translateX(200%) skew(-20deg); }
+button[type="submit"] i { margin-right: 12px; }
+.submit-note { color: var(--text-muted); font-style: italic; font-size: 0.9rem; margin-top: 1rem; }
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary-bright));
+    z-index: 100;
+    width: 0%;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+/* ============================================================
+   RESPONSIVE — 100% mobile-first, sin compromisos
+   ============================================================ */
+
+/* ─── TABLET (≤ 768px) ────────────────────────────────────── */
+@media (max-width: 768px) {
+    body {
+        padding: 1.5rem 0.8rem 5rem;
+        font-size: 1.05rem;
+    }
+
+    .container {
+        padding: 2.5rem 1.5rem;
+        border-radius: 2px;
+    }
+
+    .corner { width: 28px; height: 28px; }
+
+    /* Header */
+    h1 { font-size: clamp(1.2rem, 5vw, 1.8rem); letter-spacing: 1px; }
+    .bat-logo { width: 70px; height: 47px; margin-bottom: 1rem; }
+    .header-sub { font-size: 0.95rem; }
+
+    /* Pregunta labels */
+    label { font-size: 1rem; }
+
+    /* Canvas tools — wrap todo */
+    .canvas-tools {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+    }
+    .tool-group {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    .tool-label { width: 100%; margin-bottom: 0.2rem !important; }
+
+    /* Color buttons más grandes para touch */
+    .color-btn { width: 32px; height: 32px; }
+
+    /* Brush buttons más grandes */
+    .brush-btn { width: 42px; height: 42px; }
+
+    /* Action buttons ocupan el espacio */
+    .tool-action-btn { flex: 1; justify-content: center; }
+
+    /* Intro */
+    .intro-moon { width: 80px; height: 80px; top: 6%; }
+    .intro-title { letter-spacing: 1px; }
+    .intro-enter-btn { padding: 14px 36px; font-size: 0.95rem; letter-spacing: 2px; }
+    .intro-content { padding: 1.5rem 1.2rem; }
+    .intro-symbol { font-size: 2rem; }
+
+    /* Submit */
+    button[type="submit"] { font-size: 1rem; padding: 14px 32px; letter-spacing: 2px; }
+    .btn-container { margin-top: 3rem; }
+
+    /* Hidden msg */
+    .hidden-msg { max-width: 90vw; font-size: 0.9rem; bottom: 1rem; }
+}
+
+/* ─── PHONE (≤ 480px) ─────────────────────────────────────── */
+@media (max-width: 480px) {
+    body {
+        padding: 0.8rem 0.4rem 5rem;
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 2rem 1rem;
+        margin: 0;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        box-shadow: none;
+        /* En mobile quitamos el clip estético de los bordes */
+    }
+
+    /* Esquinas decorativas — más chicas */
+    .corner { width: 22px; height: 22px; opacity: 0.4; top: 8px; left: 8px; }
+    .corner-tr { top: 8px; right: 8px; left: auto; }
+    .corner-bl { bottom: 8px; left: 8px; top: auto; }
+    .corner-br { bottom: 8px; right: 8px; top: auto; left: auto; }
+
+    /* Header */
+    header { margin-bottom: 2rem; }
+    .bat-logo { width: 58px; height: 39px; margin-bottom: 0.8rem; }
+    h1 {
+        font-size: clamp(1rem, 6vw, 1.5rem);
+        letter-spacing: 0.5px;
+        line-height: 1.25;
+    }
+    .header-sub { font-size: 0.88rem; margin-bottom: 1.4rem; }
+    .divider-fancy { max-width: 220px; }
+
+    /* Preguntas */
+    .pregunta { margin-bottom: 1.8rem; }
+    label { font-size: 0.95rem; line-height: 1.45; }
+    label i { width: 18px; margin-right: 8px; font-size: 0.9rem; }
+
+    /* Inputs / textareas / select */
+    input[type="text"],
+    textarea,
+    select {
+        font-size: 1rem;
+        padding: 11px 12px;
+        /* Evitar zoom automático en iOS */
+        font-size: max(16px, 1rem);
+    }
+
+    /* Canvas section */
+    .canvas-section {
+        padding: 1.2rem 0.8rem;
+        margin: 2rem 0;
+    }
+    .canvas-title { font-size: 1.1rem; letter-spacing: 1px; }
+    .canvas-subtitle { font-size: 0.82rem; }
+
+    /* Canvas tools — compactos */
+    .canvas-tools {
+        padding: 0.7rem;
+        gap: 0.7rem;
+    }
+    .tool-label { font-size: 0.7rem; }
+
+    /* Color palette — 7 colores en fila, más grandes */
+    .color-palette { gap: 5px; }
+    .color-btn { width: 34px; height: 34px; border-width: 2px; }
+
+    /* Brush buttons */
+    .brush-sizes { gap: 6px; }
+    .brush-btn { width: 40px; height: 40px; }
+
+    /* Action buttons — solo iconos en pantallas pequeñas */
+    .tool-action-btn {
+        padding: 8px 12px;
+        font-size: 0.88rem;
+        gap: 5px;
+    }
+
+    /* Canvas nota */
+    .canvas-note { font-size: 0.78rem; }
+    kbd { display: none; } /* en mobile no hay Ctrl+Z, se oculta el hint */
+
+    /* Submit button — full width */
+    .btn-container { margin-top: 2.5rem; }
+    button[type="submit"] {
+        width: 100%;
+        font-size: 0.95rem;
+        padding: 15px 20px;
+        letter-spacing: 2px;
+        clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
+    }
+    button[type="submit"]:hover { letter-spacing: 2px; } /* evitar salto de texto */
+    .submit-note { font-size: 0.82rem; }
+
+    /* Intro screen — mobile */
+    .intro-moon {
+        width: 65px;
+        height: 65px;
+        top: 4%;
+    }
+    .intro-castle { bottom: -2px; }
+    .intro-content {
+        padding: 1rem 0.8rem;
+        width: 100%;
+    }
+    .intro-symbol { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .intro-title {
+        font-size: clamp(1.6rem, 10vw, 2.8rem);
+        letter-spacing: 1px;
+        line-height: 1.15;
+    }
+    .intro-sub { font-size: 0.85rem; margin-bottom: 1.8rem; }
+    .intro-enter-btn {
+        padding: 13px 28px;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        width: 100%;
+        max-width: 280px;
+    }
+    .intro-hint { font-size: 0.75rem; margin-top: 0.8rem; }
+
+    /* Drips — menos en mobile */
+    .drip { opacity: 0.5 !important; }
+
+    /* Modals */
+    .modal-inner {
+        padding: 2rem 1.2rem;
+        margin: 1rem;
+    }
+    .modal-inner h2 { font-size: 1.2rem; }
+
+    /* Hidden message */
+    .hidden-msg {
+        bottom: 0.6rem;
+        max-width: 92vw;
+        font-size: 0.88rem;
+        padding: 0.8rem 1.2rem;
+        border-radius: 6px;
+    }
+
+    /* Progress bar más gruesa para verse en mobile */
+    .scroll-progress { height: 4px; }
+}
+
+/* ─── PHONE CHICO (≤ 360px) ──────────────────────────────── */
+@media (max-width: 360px) {
+    body { padding: 0.5rem 0.2rem 5rem; }
+
+    .container { padding: 1.6rem 0.8rem; }
+
+    h1 { font-size: clamp(0.95rem, 7vw, 1.3rem); }
+
+    label { font-size: 0.9rem; }
+
+    .color-btn { width: 30px; height: 30px; }
+    .color-palette { gap: 4px; }
+
+    .brush-btn { width: 36px; height: 36px; }
+
+    button[type="submit"] { font-size: 0.88rem; letter-spacing: 1px; }
+
+    .intro-title { font-size: clamp(1.4rem, 11vw, 2rem); }
+    .intro-enter-btn { max-width: 240px; font-size: 0.8rem; }
+    .intro-moon { width: 55px; height: 55px; }
+}
+
+/* ─── LANDSCAPE PHONE ────────────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+    #introScreen {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .intro-castle { height: 60%; bottom: 0; }
+    .intro-moon { width: 50px; height: 50px; top: 5%; }
+    .intro-content { padding: 0.5rem 1rem; }
+    .intro-title { font-size: clamp(1.2rem, 5vw, 2rem); }
+    .intro-sub { display: none; }
+    .intro-symbol { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .intro-enter-btn { padding: 10px 24px; font-size: 0.85rem; }
+    .intro-hint { display: none; }
+}
+
+/* ─── FIX iOS — Sin zoom en focus ───────────────────────── */
+@supports (-webkit-touch-callout: none) {
+    input[type="text"],
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}
